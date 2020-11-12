@@ -1,9 +1,13 @@
-require('./config/config');
-
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+const routes = require('./routes/user.route')
+
+require('./config/config');
+
 
 const bodyParser = require('body-parser');
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -11,42 +15,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+app.use(routes)
 
-app.get('/user', function(req, res) {
-    res.json('get user LOCAL!!!');
-});
-
-app.post('/user', function(req, res) {
-
-    let body = req.body;
-
-    if (body.nombre === undefined) {
-
-        res.status(400).json({
-            ok: false,
-            mensaje: 'name required'
-        });
-
-    }
-    
-    res.json({
-        persona: body
-    });
-
-});
-
-app.put('/usuario/:id', function(req, res) {
-
-    let id = req.params.id;
-
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('delete Usuario');
-});
+console.log(process.env.DB_URL)
+mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    .then(() => {
+        console.log('MongoDB Connected…')
+    })
+    .catch(err => console.log(err))
 
 app.listen(process.env.PORT, () => {
     console.log('Port-->: ', process.env.PORT);
