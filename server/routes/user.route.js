@@ -4,9 +4,10 @@ const app = express();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { validAuth, isAdminRole } = require('../middlewares/auth');
 
 
-app.get('/users', async function(req, res) {
+app.get('/users', validAuth, async (req, res) => {
     try {
         const {from = 0, to = 5} = req.query
         const q = {status: true}
@@ -35,7 +36,7 @@ app.get('/users', async function(req, res) {
    
 });
 
-app.post('/users', function(req, res) {
+app.post('/users', [validAuth, isAdminRole], (req, res) => {
 
     let {body} = req;
     const { name, email, password, role } = body
@@ -60,7 +61,7 @@ app.post('/users', function(req, res) {
     })
 });
 
-app.put('/users/:id', function(req, res) {
+app.put('/users/:id', validAuth, (req, res) => {
 
     const {body, params} = req
     const {id} = params;
@@ -80,7 +81,7 @@ app.put('/users/:id', function(req, res) {
     })
 });
 
-app.delete('/users/:id', async function(req, res) {
+app.delete('/users/:id', validAuth, async (req, res) => {
     try {
         const {id} = req.params;
         const q = {
