@@ -17,9 +17,7 @@ const validAuth = async (req, res, next) => {
         console.log(err)
         return res.status(401).json({
             ok: false,
-            err: {
-                message: 'Access denied'
-            }
+            err
         })
     }
    
