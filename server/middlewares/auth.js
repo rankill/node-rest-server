@@ -30,7 +30,7 @@ const isAdminRole = (req, res, next) => {
         return res.status(401).json({
             ok: false,
             err: {
-                message: 'You cannot create users'
+                message: 'Action denied'
             }
         })  
     }

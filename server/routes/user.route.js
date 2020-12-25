@@ -12,7 +12,7 @@ app.get('/users', validAuth, async (req, res) => {
         const {from = 0, to = 5} = req.query
         const q = {status: true}
 
-        const users = await User.find(q, 'name email role status google img')
+        const users = await Users.find(q, 'name email role status google img')
                                 .skip(Number(from))
                                 .limit(Number(to))
                                 .exec()
